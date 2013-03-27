@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 public class Utils {
 	// 以最省内存的方式读取本地资源的图片,返回bitmap
@@ -17,6 +18,7 @@ public class Utils {
 		opt.inInputShareable = true;
 		InputStream is = context.getResources().openRawResource(resId);
 
+		Log.i("lei", "hahah");
 		return BitmapFactory.decodeStream(is, null, opt);
 	}
 
