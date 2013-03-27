@@ -16,20 +16,21 @@ public class Utils {
 		opt.inPurgeable = true;
 		opt.inInputShareable = true;
 		InputStream is = context.getResources().openRawResource(resId);
-		
+
 		return BitmapFactory.decodeStream(is, null, opt);
 	}
-	
+
 	// 以最省内存的方式读取本地资源的图片,返回bitmap
-		public static Drawable readDrawable(Context context, int resId) {
-			BitmapFactory.Options opt = new BitmapFactory.Options();
-			opt.inPreferredConfig = Bitmap.Config.RGB_565;
-			opt.inPurgeable = true;
-			opt.inInputShareable = true;
-			InputStream is = context.getResources().openRawResource(resId);
-			BitmapDrawable bd = new BitmapDrawable(BitmapFactory.decodeStream(is, null, opt));  
-	        Drawable drawable = (Drawable) bd;  
-			return drawable;
-		}
-    
+	public static Drawable readDrawable(Context context, int resId) {
+		BitmapFactory.Options opt = new BitmapFactory.Options();
+		opt.inPreferredConfig = Bitmap.Config.RGB_565;
+		opt.inPurgeable = true;
+		opt.inInputShareable = true;
+		InputStream is = context.getResources().openRawResource(resId);
+		BitmapDrawable bd = new BitmapDrawable(BitmapFactory.decodeStream(is,
+				null, opt));
+		Drawable drawable = (Drawable) bd;
+		return drawable;
+	}
+
 }
