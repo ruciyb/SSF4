@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">SSF4AE:Handbook</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string-array name="character_name">
+        <item>Abel</item>
+        <item>Adon</item>
+        <item>Akuma</item>
+        <item>Balrog</item>
+        <item>Blanka</item>
+        <item>Cammy</item>
+        <item>Chun-Li</item> 
+        <item>Cody</item>
+        <item>C.Viper</item>
+        <item>Dan</item>
+        <item>Dee Jay</item>
+        <item>Dhalsim</item>
+        <item>Dudley</item>
+        <item>E.Honda</item> 
+        <item>El Fuerte</item>
+        <item>Evil Ryu</item>
+        <item>Fei Long</item>
+        <item>Gen</item>
+        <item>Gouken</item>
+        <item>Guile</item>
+        <item>Guy</item> 
+        <item>Hakan</item>
+        <item>Ibuki</item>
+        <item>Juri</item>
+        <item>Ken</item>
+        <item>Makoto</item>
+        <item>M.Bison</item>
+        <item>Oni</item> 
+        <item>Rose</item>
+        <item>Rufus</item>
+        <item>Ryu</item>
+        <item>Sagat</item>
+        <item>Sakura</item>
+        <item>Seth</item>
+        <item>T.Hawk</item>
+        <item>Vega</item>
+        <item>Yang</item>
+        <item>Yun</item>
+        <item>Zangief</item>         
+    </string-array>
+	
+</resources>
