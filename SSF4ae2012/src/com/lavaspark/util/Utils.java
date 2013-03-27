@@ -17,8 +17,6 @@ public class Utils {
 		opt.inPurgeable = true;
 		opt.inInputShareable = true;
 		InputStream is = context.getResources().openRawResource(resId);
-
-		Log.i("lei", "hahah");
 		return BitmapFactory.decodeStream(is, null, opt);
 	}
 
@@ -35,4 +33,8 @@ public class Utils {
 		return drawable;
 	}
 
+	private void publ() {
+		// TODO Auto-generated method stub
+			Log.i("lei", "hahha");
+	}
 }
