@@ -100,12 +100,12 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 		LinearLayout command_layout = (LinearLayout)view.findViewById(R.id.command_linearlayout);
 		
 		resid =new Integer[]{R.drawable.head_able,R.drawable.head_adon,R.drawable.head_akuma,R.drawable.head_balrog,
-				R.drawable.head_bison,R.drawable.head_blanka,R.drawable.head_cammy,R.drawable.head_chun_li,R.drawable.head_cody,R.drawable.head_dan,
-				R.drawable.head_deejay,R.drawable.head_dhalsim,R.drawable.head_dudley,R.drawable.head_el_fuerte,R.drawable.head_evil_ryu,R.drawable.head_fei_long,
-				R.drawable.head_gen,R.drawable.head_gouken,R.drawable.head_guile,R.drawable.head_guy,R.drawable.head_hakan,R.drawable.head_honda,
-				R.drawable.head_ibuki,R.drawable.head_juri,R.drawable.head_ken,R.drawable.head_makoto,R.drawable.head_oni,
+				R.drawable.head_blanka,R.drawable.head_cammy,R.drawable.head_chun_li,R.drawable.head_cody,R.drawable.head_viper,R.drawable.head_dan,
+				R.drawable.head_deejay,R.drawable.head_dhalsim,R.drawable.head_dudley,R.drawable.head_honda,R.drawable.head_el_fuerte,R.drawable.head_evil_ryu,R.drawable.head_fei_long,
+				R.drawable.head_gen,R.drawable.head_gouken,R.drawable.head_guile,R.drawable.head_guy,R.drawable.head_hakan,
+				R.drawable.head_ibuki,R.drawable.head_juri,R.drawable.head_ken,R.drawable.head_makoto,R.drawable.head_bison,R.drawable.head_oni,
 				R.drawable.head_rose,R.drawable.head_rufus,R.drawable.head_ryu,R.drawable.head_sagat,R.drawable.head_sakura,R.drawable.head_seth,
-				R.drawable.head_t_hawk,R.drawable.head_vega,R.drawable.head_viper,R.drawable.head_yang,R.drawable.head_yun,R.drawable.head_zangief};
+				R.drawable.head_t_hawk,R.drawable.head_vega,R.drawable.head_yang,R.drawable.head_yun,R.drawable.head_zangief};
 		
 		layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.all_bg));
 		command_layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.command_bg));
