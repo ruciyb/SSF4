@@ -35,6 +35,6 @@ public class Utils {
 
 	private void publ() {
 		// TODO Auto-generated method stub
-			Log.i("lei", "hahha");
+			Log.i("lei", "eflake");
 	}
 }
