@@ -21,6 +21,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -96,7 +97,7 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 		Button forum_btn = (Button) view.findViewById(R.id.forum_button);
 		layout = View.inflate(getActivity(), R.layout.pop_window, null);
 		ListView listView = (ListView) layout.findViewById(R.id.listView1);
-		LinearLayout layout = (LinearLayout)view.findViewById(R.id.fragment_main_linearlayout);
+		LinearLayout allbg_layout = (LinearLayout)view.findViewById(R.id.fragment_main_linearlayout);
 		LinearLayout command_layout = (LinearLayout)view.findViewById(R.id.command_linearlayout);
 		
 		resid =new Integer[]{R.drawable.head_able,R.drawable.head_adon,R.drawable.head_akuma,R.drawable.head_balrog,
@@ -107,16 +108,25 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 				R.drawable.head_rose,R.drawable.head_rufus,R.drawable.head_ryu,R.drawable.head_sagat,R.drawable.head_sakura,R.drawable.head_seth,
 				R.drawable.head_t_hawk,R.drawable.head_vega,R.drawable.head_yang,R.drawable.head_yun,R.drawable.head_zangief};
 		
-		layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.all_bg));
+		allbg_layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.all_bg));
 		command_layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.command_bg));
 		
-		set_icon.setImageDrawable(getResources().getDrawable(resid[characterIndex-1]));
-		line.setImageDrawable(getResources().getDrawable(R.drawable.line));
+		
+//		set_icon.setImageDrawable(getResources().getDrawable(resid[characterIndex-1]));
+//		line.setImageDrawable(getResources().getDrawable(R.drawable.line));
+		set_icon.setImageBitmap(Utils.readBitMap(getActivity(), resid[characterIndex-1]));
+		line.setImageBitmap(Utils.readBitMap(getActivity(), R.drawable.line));
+		
 //		setImageBitmap(set_icon,R.drawable.head_icon_list);
 //		setImageBitmap(line,R.drawable.line);
-		zhaoshi_btn.setBackgroundDrawable(getResources().getDrawable(R.drawable.menu_slide_pop));
-		forum_btn.setBackgroundDrawable(getResources().getDrawable(R.drawable.abbg));
-		zhaoshiImg.setBackgroundDrawable(getResources().getDrawable(R.drawable.zhaoshi));
+		
+//		zhaoshi_btn.setBackgroundDrawable(getResources().getDrawable(R.drawable.menu_slide_pop));
+//		forum_btn.setBackgroundDrawable(getResources().getDrawable(R.drawable.abbg));
+//		zhaoshiImg.setBackgroundDrawable(getResources().getDrawable(R.drawable.zhaoshi));
+		zhaoshi_btn.setBackgroundDrawable(Utils.readDrawable(getActivity(), R.drawable.menu_slide_pop));
+		forum_btn.setBackgroundDrawable(Utils.readDrawable(getActivity(), R.drawable.abbg));
+		zhaoshiImg.setBackgroundDrawable(Utils.readDrawable(getActivity(), R.drawable.zhaoshi));
+		
 		icon_bg.setBackgroundColor(0x00EEEEEE);
 
 		textView.setText(characters[characterIndex - 1]);
@@ -130,6 +140,7 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 		layout.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
+				Log.d("111", "touch clicked");
 				if (mPop.isShowing()) {
 					mPop.dismiss();
 					mPop.setFocusable(false);
@@ -150,16 +161,17 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 				return false;
 			}
 		});
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("a");
-		list.add("a");
-		list.add("a");
-		list.add("a");
-		list.add("a");
+//		ArrayList<String> list = new ArrayList<String>();
+//		list.add("a");
+//		list.add("a");
+//		list.add("a");
+//		list.add("a");
+//		list.add("a");
 //		PopWindowListAdapter adapter = new PopWindowListAdapter(
-//				(Context) getActivity(),getMoveName(characters[characterIndex - 1]));
+//				(Context) getActivity(),list);
+		
 		PopWindowListAdapter adapter = new PopWindowListAdapter(
-				(Context) getActivity(),list);
+				(Context) getActivity(),getMoveName(characters[characterIndex - 1]));
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(this);
 		return view;
@@ -169,6 +181,7 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 		LoadImageViewAsyncTask task = new LoadImageViewAsyncTask(getActivity(),resid,imageView);
 		task.execute();
 	}
+	
 	private ArrayList<String> getMoveName(String characterName) {
 		database = SQLiteDatabase.openOrCreateDatabase(DBManager.DB_PATH + "/"
 				+ DBManager.DB_NAME, null);

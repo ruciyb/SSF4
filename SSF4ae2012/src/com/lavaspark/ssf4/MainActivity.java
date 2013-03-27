@@ -155,6 +155,7 @@ public class MainActivity extends FragmentActivity implements
 			public void onPageSelected(int position) {
 				MainActivity.character_index = mViewPager
 						.getCurrentItem();
+				Log.d("111","position ="+ position );
 
 			}
 		});
