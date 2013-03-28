@@ -1,5 +1,6 @@
 package com.lavaspark.ssf4;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,6 +12,7 @@ import com.lavaspark.adapter.PopWindowListAdapter;
 import com.lavaspark.asynctask.LoadImageViewAsyncTask;
 import com.lavaspark.db.DBManager;
 import com.lavaspark.db.EncryptionDecryption;
+import com.lavaspark.util.GlobalVariable;
 import com.lavaspark.util.Utils;
 
 import android.R.integer;
@@ -161,17 +163,23 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 				return false;
 			}
 		});
-//		ArrayList<String> list = new ArrayList<String>();
-//		list.add("a");
-//		list.add("a");
-//		list.add("a");
-//		list.add("a");
-//		list.add("a");
-//		PopWindowListAdapter adapter = new PopWindowListAdapter(
-//				(Context) getActivity(),list);
+
+		//getMoveName(characters[characterIndex - 1])
+		try {
+			DBManager.getdbManger(getActivity()).querydata(characters[characterIndex - 1 ], "jsonPhaserName");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		GlobalVariable globalVariable = ((GlobalVariable)getActivity().getApplicationContext());
+		ArrayList<String> arraylist = globalVariable.getNameList();
+		Iterator it =  arraylist.iterator();
+		while(it.hasNext()){
+			Log.i("lei", "next = "+it.next());
+		}
 		
 		PopWindowListAdapter adapter = new PopWindowListAdapter(
-				(Context) getActivity(),getMoveName(characters[characterIndex - 1]));
+				(Context) getActivity(),globalVariable.getNameList());
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(this);
 		return view;

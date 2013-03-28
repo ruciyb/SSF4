@@ -33,8 +33,4 @@ public class Utils {
 		return drawable;
 	}
 
-	private void publ() {
-		// TODO Auto-generated method stub
-			Log.i("lei", "Second");
-	}
 }
