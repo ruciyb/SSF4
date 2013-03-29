@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.SQLData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,7 +18,7 @@ import org.json.JSONObject;
 
 import com.lavaspark.adapter.Move_attr;
 import com.lavaspark.ssf4.R;
-import com.lavaspark.util.GlobalVariable;
+import com.lavaspark.util.GlobalVariables;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -64,10 +66,10 @@ public class DBManager {
 				,new String[]{name});
 		while(cursor_1.moveToNext()){
 			String cursorString = cursor_1.getString(cursor_1.getColumnIndex("frameinfo"));
-			Log.d("ZL","cursorString = "+cursorString);
+		//	Log.d("ZL","cursorString = "+cursorString);
 			EncryptionDecryption encryptionDecryption = new EncryptionDecryption("lavaspark");
 			String decryptString= encryptionDecryption.decrypt(cursorString);
-			Log.d("Test","jsonString = " + decryptString);
+		//	Log.d("Test","jsonString = " + decryptString);
 			if("jsonPhaserName".equals(methed)){
 				jsonPhaserName(decryptString);
 			}else if("jsonPhaserframeKeyAndallFrame".equals(methed)){
@@ -96,8 +98,7 @@ public class DBManager {
 				}
 			}
 			Log.d("lavaspark", nameList.toString());
-			
-			GlobalVariable globalVariable = ((GlobalVariable)context.getApplicationContext());
+			GlobalVariables globalVariable = ((GlobalVariables)context.getApplicationContext());
 			globalVariable.setNameList(nameList);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -157,4 +158,47 @@ public class DBManager {
 		Log.d("lavaspark", frameKeyList.toString());
 		Log.d("lavaspark", allFrameList.toString());
 	}
+	
+	/*****
+	 * 
+	 * @param path     
+	 * @author lei 
+	 * @serialData  130328
+	 * @	public static final String DB_NAME = "framedatabase.db"; //保存的数据库文件名
+    	public static final String PACKAGE_NAME = "com.lz.dbcopy";
+    	public static final String DB_PATH = "/data"
+            + Environment.getDataDirectory().getAbsolutePath() + "/"
+            + PACKAGE_NAME;  //在手机里存放数据库的位置
+        String databasePath = DB_PATH + "/" + DB_NAME;    ---->   /data/data/com.lz.dbcopy/framedatabase.db
+		String paht = "/data/data/"+PACKAGE_NAME+"/"+DB_NAME;   ------>   /data/data/com.lz.dbcopy/framedatabase.db   this is good;
+	 */
+	public void importdatabase(String path , InputStream inputStream){
+		
+		Log.i("lei", "importdatabase  thread is "+Thread.currentThread().getName());
+		if(inputStream == null ||  path == null){
+			Log.e("lei", "path or inputstream is not null!");
+			return;
+		}
+		//Open your local db as the input stream
+		Log.i("lei", "database path = "+path);
+		try {
+			OutputStream myOutput = new FileOutputStream(path);
+	    	byte[] buffer = new byte[1024];
+	    	int length;
+	    	while ((length = inputStream.read(buffer))>0){
+	    		myOutput.write(buffer, 0, length);
+	    	}
+	    	myOutput.flush();
+	    	myOutput.close();
+	    	inputStream.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 }

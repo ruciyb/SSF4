@@ -59,9 +59,7 @@ public class MainActivity extends FragmentActivity implements
 		setContentView(R.layout.activity_main);
 		// BarDropListAdapter barDropListAdapter =new BarDropListAdapter(new
 		// String[]{"video","video","video"},MainActivity.this);
-		characters = getResources().getStringArray(R.array.character_name);
-		layout = View
-				.inflate(MainActivity.this, R.layout.bar_drop_layout, null);
+		layout = View.inflate(MainActivity.this, R.layout.bar_drop_layout, null);
 		ListView listView = (ListView) layout.findViewById(R.id.listView1);
 		
 		layout.setFocusableInTouchMode(true);
@@ -145,17 +143,14 @@ public class MainActivity extends FragmentActivity implements
 //		LoadImageViewAsyncTask task = new LoadImageViewAsyncTask(manager,mViewPager);
 //		task.execute("InitPagerAdapter");
 		
-		mSectionsPagerAdapter = new SectionsPagerAdapter(
-				getSupportFragmentManager());
+		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
-		mViewPager
-		.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
 				MainActivity.character_index = mViewPager
 						.getCurrentItem();
-				Log.d("111","position ="+ position );
 
 			}
 		});
@@ -317,6 +312,7 @@ public class MainActivity extends FragmentActivity implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		Log.i("lei", "listveie is clicked  position  = "+position);
 		mViewPager.setCurrentItem(position-1, false);
 		MainActivity.character_index = position-1;
 
@@ -345,6 +341,7 @@ public class MainActivity extends FragmentActivity implements
 
 	@Override
 	public void toPanDingActivity(Bundle s) {
+		Log.i("lei", "toPanDingActivity  is running...");
 		Intent intent2 = new Intent(this, PanDingActivity.class);
 		intent2.putExtras(s);
 		startActivity(intent2);

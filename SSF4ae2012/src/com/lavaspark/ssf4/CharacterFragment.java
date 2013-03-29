@@ -12,7 +12,7 @@ import com.lavaspark.adapter.PopWindowListAdapter;
 import com.lavaspark.asynctask.LoadImageViewAsyncTask;
 import com.lavaspark.db.DBManager;
 import com.lavaspark.db.EncryptionDecryption;
-import com.lavaspark.util.GlobalVariable;
+import com.lavaspark.util.GlobalVariables;
 import com.lavaspark.util.Utils;
 
 import android.R.integer;
@@ -51,6 +51,7 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 	public CallbackDelegate delegate;
 	private PopupWindow mPop;
 	private View layout;
+	private int characterflag = 0;
 	private int characterIndex;
 	private Button zhaoshi_btn;
 	private SQLiteDatabase database;
@@ -89,7 +90,7 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 		characters = getActivity().getResources().getStringArray(
 				R.array.character_name);
 		characterIndex = args.getInt("position");
-
+		Log.i("lei", "test lei characterIndex = "+characterIndex);
 		TextView textView = (TextView) view.findViewById(R.id.textView1);
 		zhaoshi_btn = (Button) view.findViewById(R.id.zhaoshi_btn);
 		zhaoshiImg = (ImageView)view.findViewById(R.id.zhaoshiImg);
@@ -164,43 +165,29 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 			}
 		});
 
-		//getMoveName(characters[characterIndex - 1])
-		try {
-			DBManager.getdbManger(getActivity()).querydata(characters[characterIndex - 1 ], "jsonPhaserName");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		GlobalVariable globalVariable = ((GlobalVariable)getActivity().getApplicationContext());
-		ArrayList<String> arraylist = globalVariable.getNameList();
-		Iterator it =  arraylist.iterator();
-		while(it.hasNext()){
-			Log.i("lei", "next = "+it.next());
-		}
-		
-		PopWindowListAdapter adapter = new PopWindowListAdapter(
-				(Context) getActivity(),globalVariable.getNameList());
-		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(this);
+//		Log.i("lei", "characterIndex = "+characterIndex);
+//		if(characterflag != characterIndex){
+//			try {
+//				DBManager.getdbManger(getActivity()).querydata(characters[characterIndex - 1 ], "jsonPhaserName");
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			characterflag = characterIndex;
+//		}
+//		
+//		GlobalVariables globalVariable = ((GlobalVariables)getActivity().getApplicationContext());
+//		ArrayList<String> arraylist = globalVariable.getNameList();
+//		PopWindowListAdapter adapter = new PopWindowListAdapter(
+//				(Context) getActivity(),globalVariable.getNameList());
+//		listView.setAdapter(adapter);
+//		listView.setOnItemClickListener(this);
 		return view;
 	}
 
 	private void setImageBitmap(ImageView imageView ,int resid){
 		LoadImageViewAsyncTask task = new LoadImageViewAsyncTask(getActivity(),resid,imageView);
 		task.execute();
-	}
-	
-	private ArrayList<String> getMoveName(String characterName) {
-		database = SQLiteDatabase.openOrCreateDatabase(DBManager.DB_PATH + "/"
-				+ DBManager.DB_NAME, null);
-		Log.i("Test", "database = "+database);
-		try {
-			query(characterName);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		database.close();
-		return nameList;
 	}
 
 	/* 初始化一个弹窗 */
@@ -264,66 +251,6 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 		initPopWindow();
 	}
 	
-	public void query(String character_name) throws Exception {
-		Cursor cursor_1 = database.rawQuery("select * from framedata where name = ?"
-				,new String[]{character_name});
-		Log.i("Test", "database1 = "+database);
-		while(cursor_1.moveToNext()){
-			String cursorString = cursor_1.getString(cursor_1.getColumnIndex("frameinfo"));
-			Log.d("ZL","cursorString = "+cursorString);
-			EncryptionDecryption encryptionDecryption = new EncryptionDecryption("lavaspark");
-			String decryptString= encryptionDecryption.decrypt(cursorString);
-			Log.d("Test","jsonString = " + decryptString);
-			jsonPhaser(decryptString);
-		}
-		cursor_1.close();
-	}
 
-	public void jsonPhaser(String jsonString){
-		try {
-			array = new JSONArray(jsonString);
-			nameList = new ArrayList<String>();
-			allFrameList = new ArrayList<HashMap<String,String>>();
-
-			for (int i = 0; i < array.length(); i++) {
-				JSONObject object = array.getJSONObject(i);
-				//				Log.d("lavaspark",object.toString());
-				for (Iterator<String> iterator = object.keys(); iterator.hasNext();) {
-					Move_attr move_attr = new Move_attr();
-
-					String key = iterator.next();
-					nameList.add(key);
-					JSONArray frameaArray = object.getJSONArray(key);
-					frameKeyList = new ArrayList<String>();
-					frameMap = new HashMap<String, String>();
-					for (int j = 0; j < frameaArray.length(); j++) {
-						JSONObject lastdata = frameaArray.getJSONObject(j);
-						for (Iterator<String> iteratorNext = lastdata.keys(); iteratorNext.hasNext();) {
-							String frameKey = iteratorNext.next();
-							frameKeyList.add(frameKey);
-							frameMap.put(frameKey, lastdata.getString(frameKey));
-							if("Moves".equals(frameKey)){
-								move_attr.setmMove_Name(lastdata.getString(frameKey));
-							}else if("Startup".equals(frameKey)){
-								move_attr.setmStartup(lastdata.getString(frameKey));
-							}else if("FrameAdvHit".equals(frameKey)){
-								move_attr.setmOnHit(lastdata.getString(frameKey));
-							}else if("FrameAdvBlock".equals(frameKey)){
-								move_attr.setmOnGruard(lastdata.getString(frameKey));
-							}
-						}	
-					}
-					arraymoveList.add(move_attr);
-					allFrameList.add(frameMap);
-				}				
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		Log.d("lavaspark", nameList.toString());
-		Log.d("lavaspark", frameKeyList.toString());
-		Log.d("lavaspark", allFrameList.toString());
-
-	}
 
 }

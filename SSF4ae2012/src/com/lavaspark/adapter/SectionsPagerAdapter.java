@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -17,6 +18,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	public Fragment getItem(int i) {
 		Fragment fragment = new CharacterFragment();
         Bundle args = new Bundle();
+        Log.i("lei", "SectionsPagerAdapter  is running...  position  "+ (i+1));
         args.putInt("position", i + 1);
         fragment.setArguments(args);
         return fragment;	

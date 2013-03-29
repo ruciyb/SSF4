@@ -8,12 +8,13 @@ import com.lavaspark.adapter.Move_attr;
 
 import android.app.Application;
 
-public class GlobalVariable  extends Application{
+public class GlobalVariables extends Application {
 
-	public  ArrayList<String> nameList = new ArrayList<String>() ;
-	public List<String> frameKeyList = new ArrayList<String>();
-	public List<HashMap<String, String>> allFrameList = new ArrayList<HashMap<String,String>>();
-	public ArrayList<Move_attr> arraymoveList = new ArrayList<Move_attr>();
+	public ArrayList<String> nameList ;
+	public ArrayList<String> frameKeyList ;
+	public List<HashMap<String, String>> allFrameList;
+	public ArrayList<Move_attr> arraymoveList;
+	
 	
 	
 	public ArrayList<String> getNameList() {
@@ -22,10 +23,10 @@ public class GlobalVariable  extends Application{
 	public void setNameList(ArrayList<String> nameList) {
 		this.nameList = nameList;
 	}
-	public List<String> getFrameKeyList() {
+	public ArrayList<String> getFrameKeyList() {
 		return frameKeyList;
 	}
-	public void setFrameKeyList(List<String> frameKeyList) {
+	public void setFrameKeyList(ArrayList<String> frameKeyList) {
 		this.frameKeyList = frameKeyList;
 	}
 	public List<HashMap<String, String>> getAllFrameList() {
@@ -40,5 +41,6 @@ public class GlobalVariable  extends Application{
 	public void setArraymoveList(ArrayList<Move_attr> arraymoveList) {
 		this.arraymoveList = arraymoveList;
 	}
+	
 	
 }
