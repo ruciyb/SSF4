@@ -8,11 +8,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.lavaspark.adapter.Move_attr;
 import com.lavaspark.adapter.PopWindowListAdapter;
-import com.lavaspark.asynctask.LoadImageViewAsyncTask;
 import com.lavaspark.db.DBManager;
 import com.lavaspark.db.EncryptionDecryption;
 import com.lavaspark.util.Utils;
-
 import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
@@ -177,10 +175,6 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 		return view;
 	}
 
-	private void setImageBitmap(ImageView imageView ,int resid){
-		LoadImageViewAsyncTask task = new LoadImageViewAsyncTask(getActivity(),resid,imageView);
-		task.execute();
-	}
 	
 	private ArrayList<String> getMoveName(String characterName) {
 		database = SQLiteDatabase.openOrCreateDatabase(DBManager.DB_PATH + "/"
