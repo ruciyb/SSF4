@@ -25,8 +25,8 @@ public class SplashActivity extends Activity {
              SplashActivity.this.startActivity(mainIntent);
              SplashActivity.this.finish(); 
              DBManager dbManager = new DBManager(getApplicationContext());
-     		dbManager.openDatabase();
-     		dbManager.database.close();
+     		 dbManager.openDatabase();
+     		 dbManager.database.close();
          }
            
         }, SPLASH_DISPLAY_LENGHT);
