@@ -15,8 +15,14 @@ public class GlobalVariables extends Application {
 	public List<HashMap<String, String>> allFrameList;
 	public ArrayList<Move_attr> arraymoveList;
 	
+	public String[] Gcharacters;
 	
-	
+	public String[] getGcharacters() {
+		return Gcharacters;
+	}
+	public void setGcharacters(String[] gcharacters) {
+		Gcharacters = gcharacters;
+	}
 	public ArrayList<String> getNameList() {
 		return nameList;
 	}

@@ -12,6 +12,7 @@ import com.lavaspark.adapter.PopWindowListAdapter;
 import com.lavaspark.asynctask.LoadImageViewAsyncTask;
 import com.lavaspark.db.DBManager;
 import com.lavaspark.db.EncryptionDecryption;
+import com.lavaspark.service.SetPagedata;
 import com.lavaspark.util.GlobalVariables;
 import com.lavaspark.util.Utils;
 
@@ -22,8 +23,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -46,7 +50,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class CharacterFragment extends android.support.v4.app.Fragment
-		implements OnClickListener, OnItemClickListener {
+implements OnClickListener, OnItemClickListener ,SetPagedata{
 	public String[] characters;
 	public CallbackDelegate delegate;
 	private PopupWindow mPop;
@@ -84,13 +88,15 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		MainActivity.getFrameDataAsyncTask.setSetPagedata(this);
+		Log.i("lei", "have done set this to thread");
+		globalVariable = ((GlobalVariables)getActivity().getApplicationContext());
 		View view = inflater.inflate(R.layout.character_fragment, container,
 				false);
 		Bundle args = getArguments();
 		characters = getActivity().getResources().getStringArray(
 				R.array.character_name);
 		characterIndex = args.getInt("position");
-		Log.i("lei", "test lei characterIndex = "+characterIndex);
 		TextView textView = (TextView) view.findViewById(R.id.textView1);
 		zhaoshi_btn = (Button) view.findViewById(R.id.zhaoshi_btn);
 		zhaoshiImg = (ImageView)view.findViewById(R.id.zhaoshiImg);
@@ -99,10 +105,10 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 		ImageView line = (ImageView) view.findViewById(R.id.imageView3);
 		Button forum_btn = (Button) view.findViewById(R.id.forum_button);
 		layout = View.inflate(getActivity(), R.layout.pop_window, null);
-		ListView listView = (ListView) layout.findViewById(R.id.listView1);
+		listView = (ListView) layout.findViewById(R.id.listView1);
 		LinearLayout allbg_layout = (LinearLayout)view.findViewById(R.id.fragment_main_linearlayout);
 		LinearLayout command_layout = (LinearLayout)view.findViewById(R.id.command_linearlayout);
-		
+
 		resid =new Integer[]{R.drawable.head_able,R.drawable.head_adon,R.drawable.head_akuma,R.drawable.head_balrog,
 				R.drawable.head_blanka,R.drawable.head_cammy,R.drawable.head_chun_li,R.drawable.head_cody,R.drawable.head_viper,R.drawable.head_dan,
 				R.drawable.head_deejay,R.drawable.head_dhalsim,R.drawable.head_dudley,R.drawable.head_honda,R.drawable.head_el_fuerte,R.drawable.head_evil_ryu,R.drawable.head_fei_long,
@@ -110,34 +116,34 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 				R.drawable.head_ibuki,R.drawable.head_juri,R.drawable.head_ken,R.drawable.head_makoto,R.drawable.head_bison,R.drawable.head_oni,
 				R.drawable.head_rose,R.drawable.head_rufus,R.drawable.head_ryu,R.drawable.head_sagat,R.drawable.head_sakura,R.drawable.head_seth,
 				R.drawable.head_t_hawk,R.drawable.head_vega,R.drawable.head_yang,R.drawable.head_yun,R.drawable.head_zangief};
-		
+
 		allbg_layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.all_bg));
 		command_layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.command_bg));
-		
-		
-//		set_icon.setImageDrawable(getResources().getDrawable(resid[characterIndex-1]));
-//		line.setImageDrawable(getResources().getDrawable(R.drawable.line));
+
+
+		//		set_icon.setImageDrawable(getResources().getDrawable(resid[characterIndex-1]));
+		//		line.setImageDrawable(getResources().getDrawable(R.drawable.line));
 		set_icon.setImageBitmap(Utils.readBitMap(getActivity(), resid[characterIndex-1]));
 		line.setImageBitmap(Utils.readBitMap(getActivity(), R.drawable.line));
-		
-//		setImageBitmap(set_icon,R.drawable.head_icon_list);
-//		setImageBitmap(line,R.drawable.line);
-		
-//		zhaoshi_btn.setBackgroundDrawable(getResources().getDrawable(R.drawable.menu_slide_pop));
-//		forum_btn.setBackgroundDrawable(getResources().getDrawable(R.drawable.abbg));
-//		zhaoshiImg.setBackgroundDrawable(getResources().getDrawable(R.drawable.zhaoshi));
+
+		//		setImageBitmap(set_icon,R.drawable.head_icon_list);
+		//		setImageBitmap(line,R.drawable.line);
+
+		//		zhaoshi_btn.setBackgroundDrawable(getResources().getDrawable(R.drawable.menu_slide_pop));
+		//		forum_btn.setBackgroundDrawable(getResources().getDrawable(R.drawable.abbg));
+		//		zhaoshiImg.setBackgroundDrawable(getResources().getDrawable(R.drawable.zhaoshi));
 		zhaoshi_btn.setBackgroundDrawable(Utils.readDrawable(getActivity(), R.drawable.menu_slide_pop));
 		forum_btn.setBackgroundDrawable(Utils.readDrawable(getActivity(), R.drawable.abbg));
 		zhaoshiImg.setBackgroundDrawable(Utils.readDrawable(getActivity(), R.drawable.zhaoshi));
-		
+
 		icon_bg.setBackgroundColor(0x00EEEEEE);
 
 		textView.setText(characters[characterIndex - 1]);
-//		set_icon.getDrawable().setLevel(characterIndex);
+		//		set_icon.getDrawable().setLevel(characterIndex);
 		set_icon.setOnClickListener(this);
 		forum_btn.setOnClickListener(this);
 		zhaoshi_btn.setOnClickListener(this);
-		
+
 		/* 导入布局 */
 		layout.setFocusableInTouchMode(true);
 		layout.setOnTouchListener(new OnTouchListener() {
@@ -165,25 +171,89 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 			}
 		});
 
-//		Log.i("lei", "characterIndex = "+characterIndex);
-//		if(characterflag != characterIndex){
-//			try {
-//				DBManager.getdbManger(getActivity()).querydata(characters[characterIndex - 1 ], "jsonPhaserName");
-//			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
+
+
+		//		Log.i("lei", "characterIndex = "+characterIndex);
+		//		if(characterflag != characterIndex){
+		//			try {
+		//				DBManager.getdbManger(getActivity()).querydata(characters[characterIndex - 1 ], "jsonPhaserName");
+		//			} catch (Exception e) {
+		//				// TODO Auto-generated catch block
+		//				e.printStackTrace();
+		//			}
+		//			characterflag = characterIndex;
+		//		}
+		//		
+		//
+
+
+		
+//		new AsyncTask<Integer, Integer, Integer> (){
+//
+//			@Override
+//			protected Integer doInBackground(Integer... params) {
+//				// TODO Auto-generated method stub
+//				Log.i("lei", "neibulei  is running");
+//				while(true){
+//					if(MainActivity.fragment_last_flag == MainActivity.fragment_cur_flag)
+//						break;
+//				}
+//				return 0;
 //			}
-//			characterflag = characterIndex;
-//		}
-//		
-//		GlobalVariables globalVariable = ((GlobalVariables)getActivity().getApplicationContext());
-//		ArrayList<String> arraylist = globalVariable.getNameList();
-//		PopWindowListAdapter adapter = new PopWindowListAdapter(
-//				(Context) getActivity(),globalVariable.getNameList());
-//		listView.setAdapter(adapter);
-//		listView.setOnItemClickListener(this);
+//
+//			@Override
+//			protected void onPostExecute(Integer result) {
+//				// TODO Auto-generated method stub
+//				Log.i("lei", "neibulei  is end...");
+//				super.onPostExecute(result);
+//				ArrayList<String> arraylist = globalVariable.getNameList();
+//				PopWindowListAdapter adapter = new PopWindowListAdapter((Context) getActivity(),globalVariable.getNameList());
+//				listView.setAdapter(adapter);
+//				listView.setOnItemClickListener(CharacterFragment.this);
+//			}
+//		}.execute(0);
+	//	mHandler.post(mRunnable);
+		//		new Thread(){}
 		return view;
 	}
+
+	public void mm(int index){
+		
+	}
+
+//	Handler mHandler = new Handler () {
+//		@Override
+//		public void handleMessage(Message msg) {
+//			// TODO Auto-generated method stub
+//			if(MainActivity.fragment_last_flag != MainActivity.fragment_cur_flag){
+//				Log.i("lei", "qian fragment_last_flag = "+MainActivity.fragment_last_flag);
+//				Log.i("lei", "qian fragment_cur_flag = "+MainActivity.fragment_cur_flag);
+//				mHandler.sendEmptyMessage(0);
+//			}else {
+//				Log.i("lei", "hou fragment_last_flag = "+MainActivity.fragment_last_flag);
+//				Log.i("lei", "hou fragment_cur_flag = "+MainActivity.fragment_cur_flag);
+//
+//				ArrayList<String> arraylist = globalVariable.getNameList();
+//				PopWindowListAdapter adapter = new PopWindowListAdapter(
+//						(Context) getActivity(),globalVariable.getNameList());
+//				listView.setAdapter(adapter);
+//				listView.setOnItemClickListener(CharacterFragment.this);
+//				mHandler.removeMessages(0);
+//			}
+//		}
+//
+//	};
+//
+//	Runnable mRunnable = new Runnable() {
+//
+//		@Override
+//		public void run() {
+//			// TODO Auto-generated method stub
+//			mHandler.sendEmptyMessage(0);
+//		}
+//	};
+	private ListView listView;
+	private GlobalVariables globalVariable;
 
 	private void setImageBitmap(ImageView imageView ,int resid){
 		LoadImageViewAsyncTask task = new LoadImageViewAsyncTask(getActivity(),resid,imageView);
@@ -227,10 +297,10 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 			// Bundle bundle1 = new Bundle();
 			// delegate.toZhaoShiActivity(bundle1);
 			break;
-//		case R.id.panding_btn:
-//			Bundle bundle2 = new Bundle();
-//			delegate.toPanDingActivity(bundle2);
-//			break;
+			//		case R.id.panding_btn:
+			//			Bundle bundle2 = new Bundle();
+			//			delegate.toPanDingActivity(bundle2);
+			//			break;
 		case R.id.forum_button:
 			Bundle bundle3 = new Bundle();
 			bundle3.putString("character",
@@ -250,7 +320,21 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 		zhaoshiImg.setImageBitmap(mBitmap);
 		initPopWindow();
 	}
-	
+
+	@Override
+	public void threadsetpagedata() {
+		// TODO Auto-generated method stub
+		Log.i("lei", "set listen...");
+		ArrayList<String> arraylist = globalVariable.getNameList();
+		Iterator b =  arraylist.iterator();
+		while (b.hasNext()) {
+			Log.i("lava", "b = "+b.next());
+		}
+		PopWindowListAdapter adapter = new PopWindowListAdapter((Context) getActivity(),globalVariable.getNameList());
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(this);
+	}
+
 
 
 }

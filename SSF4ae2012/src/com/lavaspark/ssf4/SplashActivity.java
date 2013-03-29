@@ -8,6 +8,7 @@ import java.io.InputStream;
 
 import com.lavaspark.db.DBManager;
 import com.lavaspark.service.MintentService;
+import com.lavaspark.util.GlobalVariables;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,6 +24,7 @@ public class SplashActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
+        initdata();
         Log.i("lei","Current Thread is "+Thread.currentThread().getName());
         Intent intent = new Intent(this, MintentService.class);
         intent.putExtra("parameter", "createdb");
@@ -41,5 +43,13 @@ public class SplashActivity extends Activity {
          }
         }, SPLASH_DISPLAY_LENGHT);
     }
+	private void initdata() {
+		// TODO Auto-generated method stub
+		String[] character_name = this.getResources().getStringArray(
+				R.array.character_name);
+		GlobalVariables globalVariable = ((GlobalVariables)getApplicationContext());
+		globalVariable.setGcharacters(character_name);
+		
+	}
    
 }

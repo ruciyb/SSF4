@@ -97,7 +97,6 @@ public class DBManager {
 					nameList.add(key);
 				}
 			}
-			Log.d("lavaspark", nameList.toString());
 			GlobalVariables globalVariable = ((GlobalVariables)context.getApplicationContext());
 			globalVariable.setNameList(nameList);
 		} catch (JSONException e) {

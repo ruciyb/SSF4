@@ -4,6 +4,7 @@ import com.lavaspark.adapter.BarDropListAdapter;
 import com.lavaspark.adapter.PopWindowListAdapter;
 import com.lavaspark.adapter.SelectCharacterListAdapter;
 import com.lavaspark.adapter.SectionsPagerAdapter;
+import com.lavaspark.asynctask.GetFrameDataAsyncTask;
 import com.lavaspark.db.DBManager;
 import com.lavaspark.ssf4.CharacterFragment.CallbackDelegate;
 import android.R.color;
@@ -37,7 +38,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SpinnerAdapter;
 
 public class MainActivity extends FragmentActivity implements
-		AnimationLayout.Listener, OnItemClickListener, CallbackDelegate {
+AnimationLayout.Listener, OnItemClickListener, CallbackDelegate {
 	protected static AnimationLayout multiLayout;
 	private final String TAG = "eflake";
 	public static boolean IS_PAD = false;
@@ -52,19 +53,24 @@ public class MainActivity extends FragmentActivity implements
 	public final int VIDEO_ID = 1;
 	public final int FORUM_ID = 2;
 	public final int FRAMEDATA_ID = 3;
+	public static int fragment_last_flag = -1;
+	public static int fragment_cur_flag = 0;
+	public static  GetFrameDataAsyncTask getFrameDataAsyncTask;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		getdata(1);
 		// BarDropListAdapter barDropListAdapter =new BarDropListAdapter(new
 		// String[]{"video","video","video"},MainActivity.this);
 		layout = View.inflate(MainActivity.this, R.layout.bar_drop_layout, null);
 		ListView listView = (ListView) layout.findViewById(R.id.listView1);
-		
+
 		layout.setFocusableInTouchMode(true);
 		layout.setOnTouchListener(new OnTouchListener() {
-			
+
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (barPop.isShowing()) {
@@ -128,7 +134,7 @@ public class MainActivity extends FragmentActivity implements
 		ImageView imageView = new ImageView(getApplicationContext());
 		imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.slide_menu_head));
 		list.addHeaderView(imageView);
-		
+
 		SelectCharacterListAdapter adapter = new SelectCharacterListAdapter(
 				this);
 		list.setAdapter(adapter);
@@ -140,18 +146,20 @@ public class MainActivity extends FragmentActivity implements
 		// ft.add(R.id.animation_layout_content, one);
 		// ft.commit();
 
-//		LoadImageViewAsyncTask task = new LoadImageViewAsyncTask(manager,mViewPager);
-//		task.execute("InitPagerAdapter");
-		
+		//		LoadImageViewAsyncTask task = new LoadImageViewAsyncTask(manager,mViewPager);
+		//		task.execute("InitPagerAdapter");
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
+				
 				MainActivity.character_index = mViewPager
-						.getCurrentItem();
-
+						.getCurrentItem();	
+				Log.i("lei", "haha  换图了  MainActivity.character_index = "+MainActivity.character_index);
+				MainActivity.fragment_cur_flag = MainActivity.character_index;
+				getdata(MainActivity.fragment_cur_flag);
 			}
 		});
 		// mViewPager.setBackgroundColor(color.holo_red_dark);
@@ -161,13 +169,13 @@ public class MainActivity extends FragmentActivity implements
 		// We can also use ActionBar.Tab#select() to do this if we have a
 		// reference to the
 		// Tab.
-	
+
 		// if (IS_PAD) {
 		// multiLayout.toggleSidebar();
 		// }
-//		DBManager dbManager = new DBManager(getApplicationContext());
-//		dbManager.openDatabase();
-//		dbManager.database.close();
+		//		DBManager dbManager = new DBManager(getApplicationContext());
+		//		dbManager.openDatabase();
+		//		dbManager.database.close();
 
 	}
 
@@ -180,6 +188,11 @@ public class MainActivity extends FragmentActivity implements
 		if (barPop.isShowing()) {
 			barPop.dismiss();
 		}
+	}
+
+	public void getdata(int index){
+		getFrameDataAsyncTask = new GetFrameDataAsyncTask(this);
+		getFrameDataAsyncTask.execute(index);
 	}
 
 	@Override
@@ -236,29 +249,29 @@ public class MainActivity extends FragmentActivity implements
 				}
 			} else {
 				new AlertDialog.Builder(this)
-						.setIcon(R.drawable.ic_launcher)
-						.setTitle("锟斤拷锟斤拷")
-						.setMessage("确锟斤拷要锟诫开锟斤拷")
-						.setPositiveButton("锟角碉拷",
-								new DialogInterface.OnClickListener() {
+				.setIcon(R.drawable.ic_launcher)
+				.setTitle("锟斤拷锟斤拷")
+				.setMessage("确锟斤拷要锟诫开锟斤拷")
+				.setPositiveButton("锟角碉拷",
+						new DialogInterface.OnClickListener() {
 
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										android.os.Process
-												.killProcess(android.os.Process
-														.myPid());
-									}
-								})
-						.setNegativeButton("取锟斤拷",
-								new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog,
+							int which) {
+						android.os.Process
+						.killProcess(android.os.Process
+								.myPid());
+					}
+				})
+				.setNegativeButton("取锟斤拷",
+						new DialogInterface.OnClickListener() {
 
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										dialog.cancel();
-									}
-								}).show();
+					@Override
+					public void onClick(DialogInterface dialog,
+							int which) {
+						dialog.cancel();
+					}
+				}).show();
 			}
 		}
 
@@ -312,10 +325,9 @@ public class MainActivity extends FragmentActivity implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Log.i("lei", "listveie is clicked  position  = "+position);
+	
 		mViewPager.setCurrentItem(position-1, false);
 		MainActivity.character_index = position-1;
-
 		if (!IS_PAD) {
 			multiLayout.toggleSidebar();
 		}

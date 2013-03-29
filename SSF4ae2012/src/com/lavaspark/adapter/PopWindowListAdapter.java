@@ -6,6 +6,7 @@ import java.util.List;
 import com.lavaspark.ssf4.R;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class PopWindowListAdapter extends BaseAdapter
  
   public int getCount()
   {
+	Log.i("xixi", "_moveList.size() = "+_moveList.size());
     return _moveList.size();
   }
 
@@ -53,6 +55,7 @@ public class PopWindowListAdapter extends BaseAdapter
 		
 	}
     TextView tv = (TextView) v.findViewById(R.id.textView1);
+    Log.i("xixi", "tv.setTex = "+_moveList.get(position));
     tv.setText(_moveList.get(position));
     return v;
   } 
