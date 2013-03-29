@@ -44,6 +44,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lavaspark.util.Utils;
+
 
 
 //Need the following import to get access to the app resources, since this
@@ -103,7 +105,6 @@ public class WallpaperActivity extends Activity implements OnItemClickListener {
 
 			int info = mApps.get(position);
 			i.setImageResource(info);
-
 			return i;
 		}
 
