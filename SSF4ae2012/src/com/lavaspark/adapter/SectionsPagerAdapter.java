@@ -20,8 +20,10 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	public Fragment getItem(int i) {
 			Fragment fragment = new CharacterFragment();
 	        Bundle args = new Bundle();
-	        Log.i("lei", "0329testtest position  "+ (i+1));
-	        args.putInt("position", i + 1);
+//	        Log.i("lei", "0329testtest position  "+ (i+1));
+	        args.putInt("position", i );
+	        Log.i("lei", "0329testtest position  "+ i);
+//	        args.putInt("position", i + 1);
 	        fragment.setArguments(args);
 	        return fragment;	
         }

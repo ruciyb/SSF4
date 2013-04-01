@@ -2,9 +2,12 @@ package com.lavaspark.service;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.lavaspark.db.DBManager;
 import com.lavaspark.ssf4.R;
+import com.lavaspark.util.GlobalVariables;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -23,30 +26,46 @@ public class MintentService extends IntentService{
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		// TODO Auto-generated method stub
-		Log.i("lei","Current Thread is "+Thread.currentThread().getName());
 		String mParameter = intent.getStringExtra("parameter");
-		Log.i("lei","ACurrent Thread is "+mParameter);
 		dosomethingfromParameter(mParameter);
 	}
-	
+
 	private void dosomethingfromParameter(String parameter){
 		if(parameter == null){
 			Log.i("lei", "操作数据库的参数为空...");
 			return ;
 		}
 		if("createdb".equals(parameter)){
+
 			String dbpath ="/data/data/"+PACKAGE_NAME+"/"+DB_NAME;
 			if( (new File(dbpath)).exists() ){
-				Log.i("lei", "数据库已经导入过了");
 				SQLiteDatabase sqldb = SQLiteDatabase.openOrCreateDatabase(dbpath, null);
 				DBManager.database = sqldb;
-				return ;
 			}else {
-				Log.i("lei", "操作数据库要导入了。");
 				InputStream resoucein =  getResources().openRawResource(R.raw.framedatabase);
 				DBManager.getdbManger(getApplicationContext()).importdatabase(dbpath, resoucein);
 				SQLiteDatabase sqldb = SQLiteDatabase.openOrCreateDatabase(dbpath, null);
 				DBManager.database = sqldb;
+			}
+			geteverycharacterdata();
+		}
+	}
+
+	private void geteverycharacterdata(){
+		GlobalVariables globalVariable = ((GlobalVariables)getApplicationContext());
+		String[] allcharacter =  globalVariable.getcharacters();
+		HashMap<String, ArrayList<String>> hashmap = globalVariable.getAllcharacters();
+		for(String one: allcharacter){
+			try {
+				
+				ArrayList<String> characterfromdb = (ArrayList<String>) DBManager.getdbManger(getApplicationContext()).querydata(one, "jsonPhaserName");
+			//	HashMap<String, ArrayList<String>> hashmap = new HashMap<String, ArrayList<String>>();
+				hashmap.put(one, characterfromdb);
+				globalVariable.setAllcharacters(hashmap);
+				Log.i("elfake", " have added one = "+one);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}

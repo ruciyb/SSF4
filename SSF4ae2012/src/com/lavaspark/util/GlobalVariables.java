@@ -1,5 +1,6 @@
 package com.lavaspark.util;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,14 +15,31 @@ public class GlobalVariables extends Application {
 	public ArrayList<String> frameKeyList ;
 	public List<HashMap<String, String>> allFrameList;
 	public ArrayList<Move_attr> arraymoveList;
+	public HashMap<String, ArrayList<String>>  allcharacters  = new HashMap<String, ArrayList<String>>();
+	public ArrayList<String>  deliverycharacter;
 	
-	public String[] Gcharacters;
+//	public ArrayList<HashMap<String, ArrayList<String>>>
 	
-	public String[] getGcharacters() {
-		return Gcharacters;
+	public ArrayList<String> getDeliverycharacter() {
+		return deliverycharacter;
 	}
-	public void setGcharacters(String[] gcharacters) {
-		Gcharacters = gcharacters;
+	public void setDeliverycharacter(ArrayList<String> deliverycharacter) {
+		this.deliverycharacter = deliverycharacter;
+	}
+	public HashMap<String, ArrayList<String>> getAllcharacters() {
+		return allcharacters;
+	}
+	public void setAllcharacters(
+			HashMap<String, ArrayList<String>> allcharacters) {
+		this.allcharacters = allcharacters;
+	}
+	public String[] characters;
+	
+	public String[] getcharacters() {
+		return characters;
+	}
+	public void setcharacters(String[] gcharacters) {
+		characters = gcharacters;
 	}
 	public ArrayList<String> getNameList() {
 		return nameList;

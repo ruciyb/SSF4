@@ -83,13 +83,13 @@ implements OnClickListener, OnItemClickListener ,SetPagedata{
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		delegate = (CallbackDelegate) getActivity();
+		Log.i("lei", "onAttach()....");
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		MainActivity.getFrameDataAsyncTask.setSetPagedata(this);
-		Log.i("lei", "have done set this to thread");
 		globalVariable = ((GlobalVariables)getActivity().getApplicationContext());
 		View view = inflater.inflate(R.layout.character_fragment, container,
 				false);
@@ -123,7 +123,8 @@ implements OnClickListener, OnItemClickListener ,SetPagedata{
 
 		//		set_icon.setImageDrawable(getResources().getDrawable(resid[characterIndex-1]));
 		//		line.setImageDrawable(getResources().getDrawable(R.drawable.line));
-		set_icon.setImageBitmap(Utils.readBitMap(getActivity(), resid[characterIndex-1]));
+		set_icon.setImageBitmap(Utils.readBitMap(getActivity(), resid[characterIndex]));
+//		set_icon.setImageBitmap(Utils.readBitMap(getActivity(), resid[characterIndex-1]));
 		line.setImageBitmap(Utils.readBitMap(getActivity(), R.drawable.line));
 
 		//		setImageBitmap(set_icon,R.drawable.head_icon_list);
@@ -138,7 +139,8 @@ implements OnClickListener, OnItemClickListener ,SetPagedata{
 
 		icon_bg.setBackgroundColor(0x00EEEEEE);
 
-		textView.setText(characters[characterIndex - 1]);
+		textView.setText(characters[characterIndex ]);
+//		textView.setText(characters[characterIndex - 1]);
 		//		set_icon.getDrawable().setLevel(characterIndex);
 		set_icon.setOnClickListener(this);
 		forum_btn.setOnClickListener(this);
@@ -170,50 +172,12 @@ implements OnClickListener, OnItemClickListener ,SetPagedata{
 				return false;
 			}
 		});
-
-
-
-		//		Log.i("lei", "characterIndex = "+characterIndex);
-		//		if(characterflag != characterIndex){
-		//			try {
-		//				DBManager.getdbManger(getActivity()).querydata(characters[characterIndex - 1 ], "jsonPhaserName");
-		//			} catch (Exception e) {
-		//				// TODO Auto-generated catch block
-		//				e.printStackTrace();
-		//			}
-		//			characterflag = characterIndex;
-		//		}
-		//		
-		//
-
-
+		Log.i("lei", "Character characters[index] = " + characters[characterIndex]);
+		if(MainActivity.threadflag){
+			threadsetpagedata();
+		}
 		
-//		new AsyncTask<Integer, Integer, Integer> (){
-//
-//			@Override
-//			protected Integer doInBackground(Integer... params) {
-//				// TODO Auto-generated method stub
-//				Log.i("lei", "neibulei  is running");
-//				while(true){
-//					if(MainActivity.fragment_last_flag == MainActivity.fragment_cur_flag)
-//						break;
-//				}
-//				return 0;
-//			}
-//
-//			@Override
-//			protected void onPostExecute(Integer result) {
-//				// TODO Auto-generated method stub
-//				Log.i("lei", "neibulei  is end...");
-//				super.onPostExecute(result);
-//				ArrayList<String> arraylist = globalVariable.getNameList();
-//				PopWindowListAdapter adapter = new PopWindowListAdapter((Context) getActivity(),globalVariable.getNameList());
-//				listView.setAdapter(adapter);
-//				listView.setOnItemClickListener(CharacterFragment.this);
-//			}
-//		}.execute(0);
-	//	mHandler.post(mRunnable);
-		//		new Thread(){}
+		
 		return view;
 	}
 
@@ -324,14 +288,16 @@ implements OnClickListener, OnItemClickListener ,SetPagedata{
 	@Override
 	public void threadsetpagedata() {
 		// TODO Auto-generated method stub
-		Log.i("lei", "set listen...");
-		ArrayList<String> arraylist = globalVariable.getNameList();
+		Log.i("lei", "I had reviced a message from interface...");
+		Log.i("lei", " characters[index] = " + characters[characterIndex ]+" MainActivity.threadflag = "+MainActivity.threadflag);
+		ArrayList<String> arraylist = globalVariable.getDeliverycharacter();
 		Iterator b =  arraylist.iterator();
 		while (b.hasNext()) {
 			Log.i("lava", "b = "+b.next());
 		}
-		PopWindowListAdapter adapter = new PopWindowListAdapter((Context) getActivity(),globalVariable.getNameList());
+		PopWindowListAdapter adapter = new PopWindowListAdapter((Context) getActivity(),globalVariable.getDeliverycharacter());
 		listView.setAdapter(adapter);
+		adapter.notifyDataSetChanged();
 		listView.setOnItemClickListener(this);
 	}
 

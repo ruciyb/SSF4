@@ -12,38 +12,38 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class GetFrameDataAsyncTask extends AsyncTask<Integer, Integer, Integer>{
+public class GetFrameDataAsyncTask extends AsyncTask<String, Integer, String>{
 	
 	Context context;
 	String[] characters;
 	SetPagedata setPagedata;
+	int nex = 0;
 	
 	public void setSetPagedata(SetPagedata setPagedata) {
-		this.setPagedata = setPagedata;
+		if( nex == 0){
+			this.setPagedata = setPagedata;
+			nex = 1;
+		}
+		
 	}
 
 	public GetFrameDataAsyncTask(Context context) {
 		super();
 		this.context = context;
 		GlobalVariables globalVariable = ((GlobalVariables)context.getApplicationContext());
-		characters = globalVariable.getGcharacters();
+		characters = globalVariable.getcharacters();
 	}
 
 	@Override
-	protected Integer doInBackground(Integer... params) {
+	protected String doInBackground(String... params) {
 		// TODO Auto-generated method stub
-		Log.i("lei", "thread back params = "+params[0]);
+		GlobalVariables globalVariable = ((GlobalVariables)context.getApplicationContext());
 		try {
-			DBManager.getdbManger(context).querydata(characters[params[0] ], "jsonPhaserName");
+			ArrayList<String> arraylist  =  (ArrayList<String>) DBManager.getdbManger(context).querydata(params[0], "jsonPhaserName");
+			globalVariable.setDeliverycharacter(arraylist);
 			} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		GlobalVariables globalVariable = ((GlobalVariables)context.getApplicationContext());
-		ArrayList<String> a = globalVariable.getNameList();
-		Iterator b =  a.iterator();
-		while (b.hasNext()) {
-			Log.i("tang", "b = "+b.next());
 		}
 		Log.i("lei","没有异常，准备要求加载完毕....	");
 		while(true){
@@ -52,17 +52,14 @@ public class GetFrameDataAsyncTask extends AsyncTask<Integer, Integer, Integer>{
 				break;
 			}
 		}
+		nex = 0;
 		Log.i("lei","加载完毕....	");
 		return params[0];
 	}
 
 	@Override
-	protected void onPostExecute(Integer result) {
+	protected void onPostExecute(String result) {
 		// TODO Auto-generated method stub
-		Log.i("lei", "thread result params = "+result);
-		MainActivity.fragment_last_flag = result;
-		
-		
 	}
 	
 

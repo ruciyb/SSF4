@@ -56,33 +56,31 @@ public class DBManager {
 	
 
 	//**************************************************   lz 0327
-	public void querydata(String name ,String methed) throws Exception {
-		Log.d("lei", "11");
+	public Object querydata(String name ,String methed) throws Exception {
 		if(database == null ){
 			Log.i("lei", "database is null");
-			return ;
+			return null;
 		}
 		Cursor cursor_1 = database.rawQuery("select * from framedata where name = ?"
 				,new String[]{name});
 		while(cursor_1.moveToNext()){
 			String cursorString = cursor_1.getString(cursor_1.getColumnIndex("frameinfo"));
-		//	Log.d("ZL","cursorString = "+cursorString);
 			EncryptionDecryption encryptionDecryption = new EncryptionDecryption("lavaspark");
 			String decryptString= encryptionDecryption.decrypt(cursorString);
-		//	Log.d("Test","jsonString = " + decryptString);
+			
+			
 			if("jsonPhaserName".equals(methed)){
-				jsonPhaserName(decryptString);
+				return jsonPhaserName(decryptString);
 			}else if("jsonPhaserframeKeyAndallFrame".equals(methed)){
 				jsonPhaserframeKeyAndallFrame(decryptString);
 			}
-		//	jsonPhaser(decryptString);
 		}
 		cursor_1.close();
+		return null;
 	}
 
 	//**************************************************   lz 0327
-	public void jsonPhaserName(String jsonString){
-		Log.d("lei", "22");
+	public Object jsonPhaserName(String jsonString){
 		ArrayList<String> nameList ;
 		JSONArray array;
 		ArrayList<Move_attr> arraymoveList = new ArrayList<Move_attr>();
@@ -97,14 +95,16 @@ public class DBManager {
 					nameList.add(key);
 				}
 			}
-			GlobalVariables globalVariable = ((GlobalVariables)context.getApplicationContext());
-			globalVariable.setNameList(nameList);
+//			GlobalVariables globalVariable = ((GlobalVariables)context.getApplicationContext());
+//			globalVariable.setNameList(nameList);
+			return nameList;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
 
 		}
+		return null;
 	}
 
 	//**************************************************   lz 0327
@@ -173,13 +173,11 @@ public class DBManager {
 	 */
 	public void importdatabase(String path , InputStream inputStream){
 		
-		Log.i("lei", "importdatabase  thread is "+Thread.currentThread().getName());
 		if(inputStream == null ||  path == null){
 			Log.e("lei", "path or inputstream is not null!");
 			return;
 		}
 		//Open your local db as the input stream
-		Log.i("lei", "database path = "+path);
 		try {
 			OutputStream myOutput = new FileOutputStream(path);
 	    	byte[] buffer = new byte[1024];

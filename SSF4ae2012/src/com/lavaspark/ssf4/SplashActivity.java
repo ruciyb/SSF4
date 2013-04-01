@@ -25,7 +25,6 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
         initdata();
-        Log.i("lei","Current Thread is "+Thread.currentThread().getName());
         Intent intent = new Intent(this, MintentService.class);
         intent.putExtra("parameter", "createdb");
         startService(intent);
@@ -48,7 +47,7 @@ public class SplashActivity extends Activity {
 		String[] character_name = this.getResources().getStringArray(
 				R.array.character_name);
 		GlobalVariables globalVariable = ((GlobalVariables)getApplicationContext());
-		globalVariable.setGcharacters(character_name);
+		globalVariable.setcharacters(character_name);
 		
 	}
    
