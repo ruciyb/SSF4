@@ -192,12 +192,15 @@
                         android:textColor="#FFFFFF"
                         android:textSize="18sp" />
 
-                    <Button
-                        android:id="@+id/forum_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Button" />
+                    <LinearLayout
+                    android:id="@+id/command_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="100dp"
+                    android:orientation="horizontal" >
+                    
+                      
+                    </LinearLayout>>
+
 
                    <!--  <Button
                         android:id="@+id/panding_btn"

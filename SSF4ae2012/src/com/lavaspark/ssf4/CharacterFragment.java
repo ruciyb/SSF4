@@ -59,6 +59,9 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 	public Integer[] resid;
 	private JSONArray array;
 	private ImageView zhaoshiImg;
+	private View view;
+	private LinearLayout command_layout;
+	private LinearLayout zhaoshi_layout;
 
 	public interface CallbackDelegate {
 		public void chooseCharacter();
@@ -69,7 +72,6 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 
 		// public void toForumActivity(Bundle s);
 	}
-
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -79,7 +81,7 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.character_fragment, container,
+		view = inflater.inflate(R.layout.character_fragment, container,
 				false);
 		Bundle args = getArguments();
 		characters = getActivity().getResources().getStringArray(
@@ -92,12 +94,12 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 		ImageView set_icon = (ImageView) view.findViewById(R.id.imageView1);
 		ImageView icon_bg = (ImageView) view.findViewById(R.id.imageView2);
 		ImageView line = (ImageView) view.findViewById(R.id.imageView3);
-		Button forum_btn = (Button) view.findViewById(R.id.forum_button);
 		layout = View.inflate(getActivity(), R.layout.pop_window, null);
 		ListView listView = (ListView) layout.findViewById(R.id.listView1);
 		LinearLayout allbg_layout = (LinearLayout)view.findViewById(R.id.fragment_main_linearlayout);
-		LinearLayout command_layout = (LinearLayout)view.findViewById(R.id.command_linearlayout);
-		
+		command_layout = (LinearLayout)view.findViewById(R.id.command_linearlayout);
+		zhaoshi_layout = (LinearLayout)view.findViewById(R.id.command_layout);
+
 		resid =new Integer[]{R.drawable.head_able,R.drawable.head_adon,R.drawable.head_akuma,R.drawable.head_balrog,
 				R.drawable.head_blanka,R.drawable.head_cammy,R.drawable.head_chun_li,R.drawable.head_cody,R.drawable.head_viper,R.drawable.head_dan,
 				R.drawable.head_deejay,R.drawable.head_dhalsim,R.drawable.head_dudley,R.drawable.head_honda,R.drawable.head_el_fuerte,R.drawable.head_evil_ryu,R.drawable.head_fei_long,
@@ -122,7 +124,6 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 //		forum_btn.setBackgroundDrawable(getResources().getDrawable(R.drawable.abbg));
 //		zhaoshiImg.setBackgroundDrawable(getResources().getDrawable(R.drawable.zhaoshi));
 		zhaoshi_btn.setBackgroundDrawable(Utils.readDrawable(getActivity(), R.drawable.menu_slide_pop));
-		forum_btn.setBackgroundDrawable(Utils.readDrawable(getActivity(), R.drawable.abbg));
 		zhaoshiImg.setBackgroundDrawable(Utils.readDrawable(getActivity(), R.drawable.zhaoshi));
 		
 		icon_bg.setBackgroundColor(0x00EEEEEE);
@@ -130,7 +131,6 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 		textView.setText(characters[characterIndex - 1]);
 //		set_icon.getDrawable().setLevel(characterIndex);
 		set_icon.setOnClickListener(this);
-		forum_btn.setOnClickListener(this);
 		zhaoshi_btn.setOnClickListener(this);
 		
 		/* 导入布局 */
@@ -175,6 +175,52 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 		return view;
 	}
 
+	public void addCommandList(String name){
+		zhaoshi_layout.removeAllViews();
+		for (int i = 0; i < name.length(); i++) {
+			int id =0;
+			String s = name.substring(i, i+1);
+			int resid= Integer.valueOf(s);
+			switch (resid) {
+			case 1:
+				id=R.drawable.direction_1;
+				break;
+			case 2:
+				id=R.drawable.direction_2;
+				break;
+			case 3:
+				id=R.drawable.direction_3;
+				break;
+			case 4:
+				id=R.drawable.direction_4;
+				break;
+
+			default:
+				break;
+			}
+			ImageView imageView = new ImageView(getActivity());
+			imageView.setImageDrawable(getResources().getDrawable(id));
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(48,48);
+			zhaoshi_layout.addView(imageView, params);
+		}
+		
+//		ImageView imageView1 = new ImageView(getActivity());
+//		imageView1.setBackgroundResource(R.drawable.direction_1);
+//		LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(48,48);
+//		zhaoshi_layout.addView(imageView1,params1);
+//		ImageView imageView2 = new ImageView(getActivity());
+//		imageView2.setBackgroundResource(R.drawable.direction_2);
+//		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(48,48);
+//		zhaoshi_layout.addView(imageView2,params2);
+//		ImageView imageView3 = new ImageView(getActivity());
+//		imageView3.setBackgroundResource(R.drawable.direction_3);
+//		LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(48,48);
+//		zhaoshi_layout.addView(imageView3,params3);
+//		ImageView imageView4 = new ImageView(getActivity());
+//		imageView4.setBackgroundResource(R.drawable.direction_4);
+//		LinearLayout.LayoutParams params4 = new LinearLayout.LayoutParams(48,48);
+//		zhaoshi_layout.addView(imageView4,params4);
+	}
 	
 	private ArrayList<String> getMoveName(String characterName) {
 		database = SQLiteDatabase.openOrCreateDatabase(DBManager.DB_PATH + "/"
@@ -230,12 +276,6 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 //			Bundle bundle2 = new Bundle();
 //			delegate.toPanDingActivity(bundle2);
 //			break;
-		case R.id.forum_button:
-			Bundle bundle3 = new Bundle();
-			bundle3.putString("character",
-					characters[MainActivity.character_index]);
-			// delegate.toForumActivity(bundle3);
-			break;
 		default:
 			break;
 		}
@@ -246,8 +286,9 @@ public class CharacterFragment extends android.support.v4.app.Fragment
 			long id) {
 		Log.d("test", "item  = " + Integer.valueOf(position).toString());
 		Bitmap mBitmap = Utils.readBitMap(getActivity(), R.drawable.head_blanka);
-		zhaoshiImg.setImageBitmap(mBitmap);
+//		zhaoshiImg.setImageBitmap(mBitmap);
 		initPopWindow();
+		addCommandList("1234");
 	}
 	
 	public void query(String character_name) throws Exception {

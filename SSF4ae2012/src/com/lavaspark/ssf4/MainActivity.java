@@ -340,7 +340,6 @@ public class MainActivity extends FragmentActivity implements
 		// intent1.putExtras(s);
 		// startActivity(intent1);
 		// overridePendingTransition(R.anim.fade, R.anim.hold);
-
 	}
 
 	@Override
