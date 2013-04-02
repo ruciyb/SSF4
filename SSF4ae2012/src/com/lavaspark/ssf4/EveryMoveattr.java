@@ -40,10 +40,8 @@ public class EveryMoveattr extends Activity {
 
 	public void getdata(String str) throws Exception{
 		JSONObject mJsonObject = new JSONObject(str);
-		System.out.println("mJsonObject = "+mJsonObject);
 		Iterator<String> iterator = mJsonObject.keys();
 		String item_name = iterator.next();
-		System.out.println("item_name ="+item_name);
 		JSONArray smJsonaArray  = mJsonObject.getJSONArray(item_name);
 		for(int i = 0;i<smJsonaArray.length();i++){
 			JSONObject object = smJsonaArray.getJSONObject(i);

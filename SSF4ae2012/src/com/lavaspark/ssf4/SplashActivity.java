@@ -33,7 +33,6 @@ public class SplashActivity extends Activity {
          * 使用handler来处理
          */
         new Handler().postDelayed(new Runnable(){
-
          @Override
          public void run() {
              Intent mainIntent = new Intent(SplashActivity.this,MainActivity.class); 
@@ -46,9 +45,11 @@ public class SplashActivity extends Activity {
 		// TODO Auto-generated method stub
 		String[] character_name = this.getResources().getStringArray(
 				R.array.character_name);
+		String[] zhaoshi_name = this.getResources().getStringArray(
+				R.array.character_zhaoshi_name);
 		GlobalVariables globalVariable = ((GlobalVariables)getApplicationContext());
 		globalVariable.setcharacters(character_name);
-		
+		globalVariable.setCharacter_zhaoshi(zhaoshi_name);
 	}
    
 }

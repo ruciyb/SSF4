@@ -7,7 +7,6 @@ import com.lavaspark.adapter.BarDropListAdapter;
 import com.lavaspark.adapter.PopWindowListAdapter;
 import com.lavaspark.adapter.SelectCharacterListAdapter;
 import com.lavaspark.adapter.SectionsPagerAdapter;
-import com.lavaspark.asynctask.GetFrameDataAsyncTask;
 import com.lavaspark.db.DBManager;
 import com.lavaspark.ssf4.CharacterFragment.CallbackDelegate;
 import com.lavaspark.util.GlobalVariables;
@@ -58,21 +57,14 @@ AnimationLayout.Listener, OnItemClickListener, CallbackDelegate {
 	public final int VIDEO_ID = 1;
 	public final int FORUM_ID = 2;
 	public final int FRAMEDATA_ID = 3;
-	public static  GetFrameDataAsyncTask getFrameDataAsyncTask;
 	GlobalVariables globalVariable;
 	public static boolean threadflag = false; 
-
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		//getFrameDataAsyncTask = new GetFrameDataAsyncTask(this);
 		globalVariable = ((GlobalVariables)this.getApplicationContext());
 		characters = globalVariable.getcharacters();
-		getdata(characters[0]);
-		// BarDropListAdapter barDropListAdapter =new BarDropListAdapter(new
-		// String[]{"video","video","video"},MainActivity.this);
 		layout = View.inflate(MainActivity.this, R.layout.bar_drop_layout, null);
 		ListView listView = (ListView) layout.findViewById(R.id.listView1);
 
@@ -130,10 +122,6 @@ AnimationLayout.Listener, OnItemClickListener, CallbackDelegate {
 		});
 		ActionBar bar = getActionBar();
 		bar.setBackgroundDrawable(getResources().getDrawable(R.drawable.abbg));
-
-		// bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		// bar.setListNavigationCallbacks(barDropListAdapter, null);
-		// bar.setSplitBackgroundDrawable(getResources().getDrawable(R.drawable.bar_bg));
 		getScreenSize(this);
 		multiLayout = (AnimationLayout) findViewById(R.id.animation_layout);
 		multiLayout.setListener(this);
@@ -165,9 +153,9 @@ AnimationLayout.Listener, OnItemClickListener, CallbackDelegate {
 
 				MainActivity.character_index = mViewPager
 						.getCurrentItem();	
-				Log.i("lei", "haha  换图了  MainActivity.character_index = "+characters[MainActivity.character_index]);
-				getdata(characters[MainActivity.character_index]);
 			}
+			
+			
 		});
 		// mViewPager.setBackgroundColor(color.holo_red_dark);
 		// mViewPager.setHorizontalFadingEdgeEnabled(true);
@@ -195,24 +183,6 @@ AnimationLayout.Listener, OnItemClickListener, CallbackDelegate {
 		if (barPop.isShowing()) {
 			barPop.dismiss();
 		}
-	}
-
-	public void getdata(String indexname){
-//		if(getFrameDataAsyncTask != null){
-//			getFrameDataAsyncTask = null;
-//		}
-		getFrameDataAsyncTask = new GetFrameDataAsyncTask(this);
-		Log.i("lei", "indexname = "+indexname);
-		HashMap<String, ArrayList<String>> hashmap = globalVariable.getAllcharacters();
-		ArrayList<String> indexcontent =  hashmap.get(indexname);
-		if(indexcontent != null){
-			threadflag = true;
-			globalVariable.setDeliverycharacter(indexcontent);
-			Log.i("lei", "thread flag = "+threadflag);
-		}else{
-			getFrameDataAsyncTask.execute(indexname);
-		}
-
 	}
 
 	@Override
@@ -387,5 +357,6 @@ AnimationLayout.Listener, OnItemClickListener, CallbackDelegate {
 		intent2.putExtras(bundle3);
 		startActivity(intent2);
 	}
+	
 
 }

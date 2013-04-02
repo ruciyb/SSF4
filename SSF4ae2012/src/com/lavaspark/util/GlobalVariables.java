@@ -13,13 +13,20 @@ public class GlobalVariables extends Application {
 
 	public ArrayList<String> nameList ;
 	public ArrayList<String> frameKeyList ;
-	public List<HashMap<String, String>> allFrameList;
-	public ArrayList<Move_attr> arraymoveList;
+	public List<HashMap<String, String>> allFrameList = new ArrayList<HashMap<String,String>>();
+	public ArrayList<Move_attr> arraymoveList = new ArrayList<Move_attr>();
 	public HashMap<String, ArrayList<String>>  allcharacters  = new HashMap<String, ArrayList<String>>();
 	public ArrayList<String>  deliverycharacter;
+	public String[]  character_zhaoshi;
 	
 //	public ArrayList<HashMap<String, ArrayList<String>>>
 	
+	public String[] getCharacter_zhaoshi() {
+		return character_zhaoshi;
+	}
+	public void setCharacter_zhaoshi(String[] character_zhaoshi) {
+		this.character_zhaoshi = character_zhaoshi;
+	}
 	public ArrayList<String> getDeliverycharacter() {
 		return deliverycharacter;
 	}

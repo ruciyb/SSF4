@@ -1,5 +1,6 @@
 package com.lavaspark.ssf4;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import com.lavaspark.adapter.Move_attr;
 import com.lavaspark.adapter.mListAdapter;
 import com.lavaspark.db.DBManager;
 import com.lavaspark.db.EncryptionDecryption;
+import com.lavaspark.util.GlobalVariables;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -40,28 +42,33 @@ public class FrameDataActivity extends Activity {
 	private String Deliver_str = "";
 	
 	private String character_name;
+	private ArrayList<Move_attr> arraymoveList;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.framedata_list_layout);
-		Log.i("ZL", "get databases data");
 		ActionBar bar = getActionBar();
 		bar.setDisplayHomeAsUpEnabled(true);
 		Bundle bundle = getIntent().getExtras();
 		character_name = bundle.getString("character");
 		listView = (ListView) findViewById(R.id.move_listview);
-		database = SQLiteDatabase.openOrCreateDatabase(DBManager.DB_PATH + "/"
-				+ DBManager.DB_NAME, null);
-		Log.i("Test", "database = "+database);
-		database.close();
-	//	mListAdapter adapter = new mListAdapter(this, arraymoveList);
-	//	listView.setAdapter(adapter);
+		GlobalVariables globalVariable = ((GlobalVariables)this.getApplicationContext());
+		try {
+			DBManager.getdbManger(getApplicationContext()).querydata(character_name, "jsonPhaserframeKeyAndallFrame");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		arraymoveList = globalVariable.getArraymoveList();
+		mListAdapter adapter = new mListAdapter(this, arraymoveList);
+		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// TODO Auto-generated method stub
+				
 //	//			System.out.println(" name 1 = "+nameList.get(arg2));
 //				JSONObject jsonObject = null ;
 //				try {

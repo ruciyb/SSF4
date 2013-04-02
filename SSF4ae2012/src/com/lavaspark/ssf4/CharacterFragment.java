@@ -68,6 +68,7 @@ implements OnClickListener, OnItemClickListener ,SetPagedata{
 	public Integer[] resid;
 	private JSONArray array;
 	private ImageView zhaoshiImg;
+	public boolean  threadflag = false;
 
 	public interface CallbackDelegate {
 		public void chooseCharacter();
@@ -79,24 +80,21 @@ implements OnClickListener, OnItemClickListener ,SetPagedata{
 		// public void toForumActivity(Bundle s);
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		delegate = (CallbackDelegate) getActivity();
-		Log.i("lei", "onAttach()....");
-	}
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		MainActivity.getFrameDataAsyncTask.setSetPagedata(this);
+		//		MainActivity.getFrameDataAsyncTask.setSetPagedata(this);
 		globalVariable = ((GlobalVariables)getActivity().getApplicationContext());
+
 		View view = inflater.inflate(R.layout.character_fragment, container,
 				false);
 		Bundle args = getArguments();
 		characters = getActivity().getResources().getStringArray(
 				R.array.character_name);
 		characterIndex = args.getInt("position");
+		Log.i("lei", "position name  = "+characters[characterIndex]);
 		TextView textView = (TextView) view.findViewById(R.id.textView1);
 		zhaoshi_btn = (Button) view.findViewById(R.id.zhaoshi_btn);
 		zhaoshiImg = (ImageView)view.findViewById(R.id.zhaoshiImg);
@@ -121,18 +119,9 @@ implements OnClickListener, OnItemClickListener ,SetPagedata{
 		command_layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.command_bg));
 
 
-		//		set_icon.setImageDrawable(getResources().getDrawable(resid[characterIndex-1]));
-		//		line.setImageDrawable(getResources().getDrawable(R.drawable.line));
 		set_icon.setImageBitmap(Utils.readBitMap(getActivity(), resid[characterIndex]));
-//		set_icon.setImageBitmap(Utils.readBitMap(getActivity(), resid[characterIndex-1]));
 		line.setImageBitmap(Utils.readBitMap(getActivity(), R.drawable.line));
 
-		//		setImageBitmap(set_icon,R.drawable.head_icon_list);
-		//		setImageBitmap(line,R.drawable.line);
-
-		//		zhaoshi_btn.setBackgroundDrawable(getResources().getDrawable(R.drawable.menu_slide_pop));
-		//		forum_btn.setBackgroundDrawable(getResources().getDrawable(R.drawable.abbg));
-		//		zhaoshiImg.setBackgroundDrawable(getResources().getDrawable(R.drawable.zhaoshi));
 		zhaoshi_btn.setBackgroundDrawable(Utils.readDrawable(getActivity(), R.drawable.menu_slide_pop));
 		forum_btn.setBackgroundDrawable(Utils.readDrawable(getActivity(), R.drawable.abbg));
 		zhaoshiImg.setBackgroundDrawable(Utils.readDrawable(getActivity(), R.drawable.zhaoshi));
@@ -140,8 +129,6 @@ implements OnClickListener, OnItemClickListener ,SetPagedata{
 		icon_bg.setBackgroundColor(0x00EEEEEE);
 
 		textView.setText(characters[characterIndex ]);
-//		textView.setText(characters[characterIndex - 1]);
-		//		set_icon.getDrawable().setLevel(characterIndex);
 		set_icon.setOnClickListener(this);
 		forum_btn.setOnClickListener(this);
 		zhaoshi_btn.setOnClickListener(this);
@@ -160,6 +147,7 @@ implements OnClickListener, OnItemClickListener ,SetPagedata{
 				return false;
 			}
 		});
+		setMenuVisibility(true);
 		layout.setOnKeyListener(new OnKeyListener() {
 
 			@Override
@@ -172,50 +160,32 @@ implements OnClickListener, OnItemClickListener ,SetPagedata{
 				return false;
 			}
 		});
-		Log.i("lei", "Character characters[index] = " + characters[characterIndex]);
-		if(MainActivity.threadflag){
-			threadsetpagedata();
+		
+		ArrayList<String> arraylist = new ArrayList<String>();
+		String[] zhaoshi_name = globalVariable.getCharacter_zhaoshi();
+		String[] stringarray = zhaoshi_name[characterIndex].split(",");
+		for(int i = 0 ; i<stringarray.length;i++){
+			arraylist.add(stringarray[i]);
 		}
-		
-		
+		arraylist.add("");
+		arraylist.add("");
+		PopWindowListAdapter adapter = new PopWindowListAdapter((Context) getActivity(),arraylist);
+		listView.setAdapter(adapter);
+		adapter.notifyDataSetChanged();
+		listView.setOnItemClickListener(this);
+		threadsetpagedata();
 		return view;
 	}
 
-	public void mm(int index){
-		
+
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		delegate = (CallbackDelegate) getActivity();
+		Log.i("lei", "onAttach()....,characterIndex = "+ characterIndex );
 	}
 
-//	Handler mHandler = new Handler () {
-//		@Override
-//		public void handleMessage(Message msg) {
-//			// TODO Auto-generated method stub
-//			if(MainActivity.fragment_last_flag != MainActivity.fragment_cur_flag){
-//				Log.i("lei", "qian fragment_last_flag = "+MainActivity.fragment_last_flag);
-//				Log.i("lei", "qian fragment_cur_flag = "+MainActivity.fragment_cur_flag);
-//				mHandler.sendEmptyMessage(0);
-//			}else {
-//				Log.i("lei", "hou fragment_last_flag = "+MainActivity.fragment_last_flag);
-//				Log.i("lei", "hou fragment_cur_flag = "+MainActivity.fragment_cur_flag);
-//
-//				ArrayList<String> arraylist = globalVariable.getNameList();
-//				PopWindowListAdapter adapter = new PopWindowListAdapter(
-//						(Context) getActivity(),globalVariable.getNameList());
-//				listView.setAdapter(adapter);
-//				listView.setOnItemClickListener(CharacterFragment.this);
-//				mHandler.removeMessages(0);
-//			}
-//		}
-//
-//	};
-//
-//	Runnable mRunnable = new Runnable() {
-//
-//		@Override
-//		public void run() {
-//			// TODO Auto-generated method stub
-//			mHandler.sendEmptyMessage(0);
-//		}
-//	};
 	private ListView listView;
 	private GlobalVariables globalVariable;
 
@@ -234,6 +204,9 @@ implements OnClickListener, OnItemClickListener ,SetPagedata{
 			mPop.dismiss();
 		}
 	}
+
+
+
 
 	@Override
 	public void onClick(View v) {
@@ -288,17 +261,7 @@ implements OnClickListener, OnItemClickListener ,SetPagedata{
 	@Override
 	public void threadsetpagedata() {
 		// TODO Auto-generated method stub
-		Log.i("lei", "I had reviced a message from interface...");
-		Log.i("lei", " characters[index] = " + characters[characterIndex ]+" MainActivity.threadflag = "+MainActivity.threadflag);
-		ArrayList<String> arraylist = globalVariable.getDeliverycharacter();
-		Iterator b =  arraylist.iterator();
-		while (b.hasNext()) {
-			Log.i("lava", "b = "+b.next());
-		}
-		PopWindowListAdapter adapter = new PopWindowListAdapter((Context) getActivity(),globalVariable.getDeliverycharacter());
-		listView.setAdapter(adapter);
-		adapter.notifyDataSetChanged();
-		listView.setOnItemClickListener(this);
+
 	}
 
 

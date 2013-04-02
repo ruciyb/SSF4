@@ -36,7 +36,6 @@ public class MintentService extends IntentService{
 			return ;
 		}
 		if("createdb".equals(parameter)){
-
 			String dbpath ="/data/data/"+PACKAGE_NAME+"/"+DB_NAME;
 			if( (new File(dbpath)).exists() ){
 				SQLiteDatabase sqldb = SQLiteDatabase.openOrCreateDatabase(dbpath, null);
@@ -47,26 +46,7 @@ public class MintentService extends IntentService{
 				SQLiteDatabase sqldb = SQLiteDatabase.openOrCreateDatabase(dbpath, null);
 				DBManager.database = sqldb;
 			}
-			geteverycharacterdata();
-		}
-	}
-
-	private void geteverycharacterdata(){
-		GlobalVariables globalVariable = ((GlobalVariables)getApplicationContext());
-		String[] allcharacter =  globalVariable.getcharacters();
-		HashMap<String, ArrayList<String>> hashmap = globalVariable.getAllcharacters();
-		for(String one: allcharacter){
-			try {
-				
-				ArrayList<String> characterfromdb = (ArrayList<String>) DBManager.getdbManger(getApplicationContext()).querydata(one, "jsonPhaserName");
-			//	HashMap<String, ArrayList<String>> hashmap = new HashMap<String, ArrayList<String>>();
-				hashmap.put(one, characterfromdb);
-				globalVariable.setAllcharacters(hashmap);
-				Log.i("elfake", " have added one = "+one);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		
 		}
 	}
 

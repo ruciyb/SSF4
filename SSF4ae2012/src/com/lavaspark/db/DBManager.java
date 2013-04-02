@@ -95,8 +95,6 @@ public class DBManager {
 					nameList.add(key);
 				}
 			}
-//			GlobalVariables globalVariable = ((GlobalVariables)context.getApplicationContext());
-//			globalVariable.setNameList(nameList);
 			return nameList;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -109,7 +107,7 @@ public class DBManager {
 
 	//**************************************************   lz 0327
 	public void jsonPhaserframeKeyAndallFrame(String jsonString){
-		List<String> nameList = new ArrayList<String>()  ;
+		List<String> nameList = new ArrayList<String>();
 		List<String> frameKeyList = new ArrayList<String>();
 		List<HashMap<String, String>> allFrameList = new ArrayList<HashMap<String,String>>();
 		HashMap<String,String> frameMap;
@@ -148,6 +146,7 @@ public class DBManager {
 					}
 					arraymoveList.add(move_attr);
 					allFrameList.add(frameMap);
+					
 				}				
 			}
 		} catch (JSONException e) {
@@ -156,6 +155,9 @@ public class DBManager {
 		Log.d("lavaspark", nameList.toString());
 		Log.d("lavaspark", frameKeyList.toString());
 		Log.d("lavaspark", allFrameList.toString());
+		GlobalVariables globalVariable = ((GlobalVariables)context.getApplicationContext());
+		globalVariable.setArraymoveList(arraymoveList);
+		globalVariable.setAllFrameList(allFrameList);
 	}
 	
 	/*****
